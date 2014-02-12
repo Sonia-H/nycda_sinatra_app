@@ -1,0 +1,18 @@
+<h1> Welcome to my site</h1>
+<hr>
+<% nav_routes = ["tacos","hungry","unsupported"] %>
+<nav>
+  <ul>
+   <% nav_routes.each do |route| %>
+     <li style="border:1px dashed black;border:10px;margin:10px;">
+        <a href="/<%= route %>"><%= route %></a>
+     </li>
+    <% end %>
+  </ul>
+</nav>
+
+<body>
+  <p> some content </p>
+</body>
+
+
