@@ -1,22 +1,46 @@
+# GEMS (i.e. libraries) FOR APPLICATION
 require 'sinatra'
+require 'sinatra/activerecord'
 
+# SETTINGS
+#
+# * database connection
+
+set :database, "sqlite3:///test_app.sqlite3"
+
+# * load Ruby files
+# - this command requires all Ruby files (ending in .rb) in the root
+#   of the folder AND in a folder called 'models'
+# - this lets us split our models up into multiple files == cleaner
+
+Dir['./*.rb','./models/*.rb'].each{ |f| require f }
+
+# ROUTES
+#
 get "/" do
-  erb :index
+
 end
 
 get "/tacos" do
-  erb :home
+  @tacos = Taco.all
+
+  erb :index
 end
 
-get "/hungry" do
-  "I need to put some food in my mouth right now."
+get "/toppings" do
+  @toppings = Topping.all
+
+  erb :index
 end
 
-get "/unsupported" do
-  "We don't support creation of tacos at this time!"
+get "/blog" do
+  @posts = Post.all
+
+  erb :index
 end
 
-post "/new_taco" do
-  p params
-  redirect to('/unsupported')
+get "/members" do
+  @users = User.all
+
+  erb :index
 end
