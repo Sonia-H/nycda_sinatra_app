@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140222022345) do
+ActiveRecord::Schema.define(version: 20140222022336) do
 
   create_table "posts", force: true do |t|
     t.integer  "user_id"
@@ -35,11 +35,6 @@ ActiveRecord::Schema.define(version: 20140222022345) do
     t.string  "name"
     t.integer "rating"
     t.boolean "display"
-  end
-
-  create_table "tacos_toppings", id: false, force: true do |t|
-    t.integer "taco_id",    null: false
-    t.integer "topping_id", null: false
   end
 
   create_table "toppings", force: true do |t|

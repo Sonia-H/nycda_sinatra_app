@@ -7,6 +7,7 @@ require 'sinatra/activerecord'
 # * database connection
 
 set :database, "sqlite3:///test_app.sqlite3"
+set :sessions, true
 
 # * load Ruby files
 # - this command requires all Ruby files (ending in .rb) in the root
@@ -15,11 +16,37 @@ set :database, "sqlite3:///test_app.sqlite3"
 
 Dir['./*.rb','./models/*.rb'].each{ |f| require f }
 
+# METHODS
+#
+def current_user
+  if session[:user_id]
+    @current_user = User.find( session[:user_id] )
+  end
+end
+
 # ROUTES
 #
 get "/" do
-
+  erb :index
 end
+
+
+post "/sign-in" do
+  @user = User.where(email: params[:username] ).first
+
+  if @user && ( @user.password == params[:password] )
+    puts "Yay! Signed in!"
+    #store the user id in the session
+    session[:user_id] = @user.id
+
+    redirect to "/blog"
+  else
+    raise "User not found!"
+
+    redirect to "/"
+  end
+end
+
 
 get "/tacos" do
   @tacos = Taco.all
@@ -33,14 +60,25 @@ get "/toppings" do
   erb :index
 end
 
-get "/blog" do
-  @posts = Post.all
-
-  erb :index
+get "/new-post" do
+  erb :new_post
 end
 
-get "/members" do
-  @users = User.all
+post "/create_post" do
+  if params[:title] && params[:body]
+    #make the Post in here...
+    @post = Post.create(user_id: params[:user_id], title: params[:title], body: params[:body])
 
-  erb :index
+    if @post
+      redirect to("/blog")
+    else
+      redirect to("/new-post")
+    end
+  else
+    redirect to("/new-post")
+  end
+end
+
+get "/blog" do
+  erb :home
 end

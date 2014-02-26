@@ -1,8 +1,21 @@
-<h1> Weather Report</h1>
-<hr>
-<body>
-  <p> The current weather is </p>
-  <b><%= @data['weather'][0]["description"] %> </b>
-</body>
+<h1>
+  Posts for
+  <%= current_user.email %>
+</h1>
 
+<a href="/new-post">Create new post!</a>
 
+<ul>
+  <% current_user.posts.order("created_at DESC").each do |post| %>
+    <li style="margin: 10px; padding: 10px; border:1px solid grey;">
+      <b>
+        <%= post.title %>
+      </b>
+      <p>
+        <%= post.body %>
+      </p>
+      <small>
+        <%= post.created_at.strftime("%m/%d/%Y") %>
+      </small>
+    </li>
+  <% end %>
